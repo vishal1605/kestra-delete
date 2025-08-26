@@ -1,0 +1,7 @@
+id: woodpecker_605085
+namespace: dev
+
+tasks:
+  - id: hello
+    type: io.kestra.plugin.core.log.Log
+    message: Hello World! 🚀
