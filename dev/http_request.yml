@@ -1,12 +1,28 @@
 id: http_request
 namespace: dev
 
+inputs:
+  - id: payload
+    type: JSON
+    defaults: |
+      { "title": "Kestra Pen" }
+
 tasks:
-  - id: send_data
+  - id: get_data
     type: io.kestra.plugin.core.http.Request
     uri: https://dummyjson.com/products
     method: GET
     contentType: application/json
-  - id: print_status
+  - id: print_status_get
+    type: io.kestra.plugin.core.log.Log
+    message: "{{ outputs.get_data.body }}"
+
+  - id: send_data
+    type: io.kestra.plugin.core.http.Request
+    uri: https://dummyjson.com/products/add
+    method: POST
+    contentType: application/json
+    body: "{{ inputs.payload }}"
+  - id: print_status_post
     type: io.kestra.plugin.core.log.Log
     message: "{{ outputs.send_data.body }}"
