@@ -1,0 +1,12 @@
+id: http_request
+namespace: dev
+
+tasks:
+  - id: send_data
+    type: io.kestra.plugin.core.http.Request
+    uri: https://dummyjson.com/products
+    method: GET
+    contentType: application/json
+  - id: print_status
+    type: io.kestra.plugin.core.log.Log
+    message: "{{ outputs.send_data.body }}"
