@@ -1,0 +1,11 @@
+id: hello-dev
+namespace: dev
+
+tasks:
+  - id: print_message
+    type: io.kestra.plugin.core.log.Log
+    message: "Hello from DEV namespace! 🚀"
+
+  - id: print_info
+    type: io.kestra.plugin.core.log.Log
+    message: "Namespace: {{ flow.namespace }}, Flow ID: {{ flow.id }}"
