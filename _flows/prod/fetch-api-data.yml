@@ -1,0 +1,54 @@
+id: fetch-api-data
+namespace: prod
+
+tasks:
+  - id: show_environment
+    type: io.kestra.plugin.core.log.Log
+    message: "🌍 Running in PROD environment"
+
+  - id: show_host
+    type: io.kestra.plugin.core.log.Log
+    message: "🖥️  MSSQL Host: {{secret('PROD_MSSQL_HOST')}}"
+
+  - id: show_password
+    type: io.kestra.plugin.core.log.Log
+    message: "🔑 MSSQL Password: {{secret('PROD_MSSQL_PASSWORD')}}"
+
+  - id: fetch_data
+    type: io.kestra.plugin.core.http.Request
+    uri: "{{secret('PROD_API_URL')}}"
+
+  - id: print_posts
+    type: io.kestra.plugin.scripts.python.Script
+    containerImage: python:3.11-slim
+    beforeCommands:
+      - pip install requests
+    script: |
+      import json
+      import requests
+      
+      api_url = "{{secret('PROD_API_URL')}}"
+      
+      print("="*60)
+      print("📡 PROD Environment - Fetching from API")
+      print("="*60)
+      
+      response = requests.get(api_url)
+      data = response.json()
+      
+      # Check if single post or array
+      if isinstance(data, list):
+          print(f"\n✅ Fetched {len(data)} posts\n")
+          for i, post in enumerate(data, 1):
+              print(f"Post {i}:")
+              print(f"  ID: {post['id']}")
+              print(f"  Title: {post['title']}")
+              print(f"  Body: {post['body'][:80]}...")
+              print()
+      else:
+          print(f"\n✅ Fetched 1 post\n")
+          print(f"Post ID: {data['id']}")
+          print(f"Title: {data['title']}")
+          print(f"Body: {data['body']}")
+      
+      print("="*60)
