@@ -1,0 +1,23 @@
+# Environment files with real secrets
+credentials.env
+*.env
+!credentials.env.template
+
+# Kestra local data
+.kestra/
+storage/
+kestra-data/
+
+# Docker volumes
+postgres-data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
